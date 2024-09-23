@@ -48,8 +48,10 @@ int main(int argc,char ** argv)
     Mat image;
     chrono::steady_clock::time_point Tbegin, Tend;
 
+    std::cout << "Loading model..." << std::endl;
     // Load model
-    std::unique_ptr<tflite::FlatBufferModel> model = tflite::FlatBufferModel::BuildFromFile("mobilenet_v1_1.0_224_quant.tflite");
+    std::unique_ptr<tflite::FlatBufferModel> model = tflite::FlatBufferModel::BuildFromFile("./inception_v4.tflite");
+    std::cout << "Model loaded successfully" << std::endl;
 
     // Build the interpreter
     tflite::ops::builtin::BuiltinOpResolver resolver;
