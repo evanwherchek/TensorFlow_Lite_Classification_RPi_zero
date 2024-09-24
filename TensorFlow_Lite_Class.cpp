@@ -48,9 +48,10 @@ int main(int argc,char ** argv)
     Mat image;
     chrono::steady_clock::time_point Tbegin, Tend;
 
+    const char* model_path = "/home/evanh/TensorFlow_Lite_Classification_RPi_zero/inception_v4.tflite";
+
     std::cout << "Loading model..." << std::endl;
-    // Load model
-    std::unique_ptr<tflite::FlatBufferModel> model = tflite::FlatBufferModel::BuildFromFile("./inception_v4.tflite");
+    std::unique_ptr<tflite::FlatBufferModel> model = tflite::FlatBufferModel::BuildFromFile(model_path);
     std::cout << "Model loaded successfully" << std::endl;
 
     // Build the interpreter
@@ -72,16 +73,14 @@ int main(int argc,char ** argv)
     cout << "width    : "<< model_width << endl;
     cout << "channels : "<< model_channels << endl;
 
-	// Get the names
-	bool result = getFileContent("labels.txt");
-	if(!result)
-	{
+    // Get the names
+    bool result = getFileContent("labels.txt");
+    if(!result){
         cout << "loading labels failed";
         exit(-1);
-	}
+    }
 
-//    frame=imread("tabby.jpeg");//schoolbus.jpg");  //need to refresh frame before dnn class detection
-    frame=imread("schoolbus.jpg");  //need to refresh frame before dnn class detection
+    frame=imread("reveille.jpg");  //need to refresh frame before dnn class detection
     if (frame.empty()) {
         cerr << "Can not load picture!" << endl;
         exit(-1);

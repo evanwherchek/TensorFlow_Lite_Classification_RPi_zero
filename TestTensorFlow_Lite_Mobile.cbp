@@ -33,17 +33,17 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add option="-pthread" />
-			<Add directory="/usr/local/include/opencv4" />
-			<Add directory="/home/pi/tensorflow" />
-			<Add directory="/home/pi/tensorflow/tensorflow/lite/tools/make/downloads/flatbuffers/include" />
-			<Add directory="/home/pi/tensorflow/tensorflow/lite/tools/make/downloads/absl" />
+			<Add directory="/usr/include/opencv4" />
+			<Add directory="/home/evanh/tensorflow" />
+			<Add directory="/home/evanh/tensorflow/tensorflow/lite/tools/make/downloads/flatbuffers/include" />
+			<Add directory="/home/evanh/tensorflow/tensorflow/lite/tools/make/downloads/absl" />
 		</Compiler>
 		<Linker>
 			<Add option="-O3" />
 			<Add option="`pkg-config --libs --cflags opencv4`" />
 			<Add option="-pthread" />
 			<Add option="-latomic" />
-			<Add library="/home/pi/tensorflow/tensorflow/lite/tools/make/gen/rpi_armv6/lib/libtensorflow-lite.a" />
+			<Add library="/home/evanh/tensorflow/tensorflow/lite/tools/make/gen/rpi_armv6/lib/libtensorflow-lite.a" />
 			<Add library="/lib/arm-linux-gnueabihf/libdl.so.2" />
 		</Linker>
 		<Unit filename="TensorFlow_Lite_Class.cpp" />
