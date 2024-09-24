@@ -15,7 +15,7 @@ INC = -I/usr/include/opencv4 -I/home/evanh/tensorflow -I/home/evanh/tensorflow/t
 CFLAGS = -O3 -Wall -fexceptions -pthread
 RESINC = 
 LIBDIR = 
-LIB = /home/evanh/tensorflow/tensorflow/lite/tools/make/gen/rpi_armv6/lib/libtensorflow-lite.a /lib/arm-linux-gnueabihf/libdl.so.2 -latomic
+LIB = /home/evanh/tensorflow/tensorflow/lite/tools/make/gen/rpi_armv6/lib/libtensorflow-lite.a /lib/arm-linux-gnueabihf/libdl.so.2 -latomic -lcurl
 LDFLAGS = -O3 `pkg-config --libs --cflags opencv4` -pthread
 
 INC_DEBUG = $(INC)

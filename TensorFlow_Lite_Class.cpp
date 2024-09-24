@@ -9,6 +9,7 @@
 #include "tensorflow/lite/string_util.h"
 #include "tensorflow/lite/examples/label_image/get_top_n.h"
 #include "tensorflow/lite/model.h"
+#include <curl/curl.h>
 #include <cmath>
 
 using namespace cv;
@@ -40,6 +41,34 @@ static bool getFileContent(std::string fileName)
 	return true;
 }
 
+size_t writeCallback(void* contents, size_t size, size_t nmemb, void* userp) {
+	((std::string*)userp)->append((char*)contents, size * nmemb);
+	return size * nmemb;
+}
+
+bool downloadImage(const std::string& url, const std::string& filename) {
+	CURL* curl;
+	CURLcode res;
+	std::string readBuffer;
+
+	curl = curl_easy_init();
+	if(curl) {
+		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+		res = curl_easy_perform(curl);
+		curl_easy_cleanup(curl);
+
+		if(res == CURLE_OK) {
+			std::ofstream outFile(filename, std::ios::binary);
+			outFile.write(readBuffer.c_str(), readBuffer.size());
+			outFile.close();
+			return true;
+		}
+	}
+	return false;
+}
+
 int main(int argc,char ** argv)
 {
     int f;
@@ -53,6 +82,10 @@ int main(int argc,char ** argv)
     std::cout << "Loading model..." << std::endl;
     std::unique_ptr<tflite::FlatBufferModel> model = tflite::FlatBufferModel::BuildFromFile(model_path);
     std::cout << "Model loaded successfully" << std::endl;
+
+    std::cout << "----------------" << std::endl;
+    std::cout << "ClassifyBot v1.0" << std::endl;
+    std::cout << "----------------" << std::endl;
 
     // Build the interpreter
     tflite::ops::builtin::BuiltinOpResolver resolver;
@@ -73,14 +106,26 @@ int main(int argc,char ** argv)
     cout << "width    : "<< model_width << endl;
     cout << "channels : "<< model_channels << endl;
 
+    cout << "Image URL: ";
+    std::string url;
+    cin >> url;
+
+    std::string filename = "downloaded_image.jpg";
+
+    if(downloadImage(url, filename)) {
+	    std::cout << "Image downloaded successfully." << std::endl;
+    } else{
+	    std::cout << "Failed to download image." << std::endl;
+    }
+
     // Get the names
-    bool result = getFileContent("labels.txt");
+    bool result = getFileContent("/home/evanh/TensorFlow_Lite_Classification_RPi_zero/labels.txt");
     if(!result){
         cout << "loading labels failed";
         exit(-1);
     }
 
-    frame=imread("reveille.jpg");  //need to refresh frame before dnn class detection
+    frame=imread(filename);  //need to refresh frame before dnn class detection
     if (frame.empty()) {
         cerr << "Can not load picture!" << endl;
         exit(-1);
